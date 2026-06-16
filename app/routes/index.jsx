@@ -6,7 +6,8 @@ import Ionicons from '@expo/vector-icons/Ionicons';
 import Login from '../pages/login';
 import Registro from '../pages/registro';
 import Cadastro from '../pages/cadastro';
-import Dashboard from '../pages/dashboard'
+import Dashboard from '../pages/dashboard';
+import Relatorio from '../pages/relatorio';
 
 
 //import dos navegadores
@@ -24,7 +25,7 @@ function MenuSuperior() {
                 drawerIcon: ({ color, size, focused }) => {
                     let nomeIcone = 'menu-outline';
 
-                    if (route.name === 'Nome') {
+                    if (route.name === 'Home') {
                         nomeIcone = focused ? 'audit' : 'audit-outline';
                     }
 
@@ -40,7 +41,7 @@ function MenuSuperior() {
         > 
             <Draw.Screen name='Home' component={Dashboard} options={{headerTitleAlign: 'center'}} />
             <Draw.Screen name='Cadastro' component={Cadastro} />
-            {/* <Draw.Screen name='Profissionais' component={Profissionais} /> */}
+            <Draw.Screen name='Relatorio' component={Relatorio}/>
         </Draw.Navigator>
     )
 }

@@ -1,196 +1,220 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  ScrollView,
-  StyleSheet,
-} from 'react-native';
+import { View, Text, ScrollView, Dimensions, StyleSheet } from "react-native";
+import { LineChart, PieChart } from "react-native-chart-kit";
 
-export default function Cadastro() {
+const { width } = Dimensions.get("window");
+
+const dadosLinha = {
+  labels: ["Jan", "Fev", "Mar", "Abr", "Mai", "Jun"],
+  datasets: [{ data: [65, 66, 68, 77, 50, 40] }],
+};
+
+const dadosPizza = [
+  {
+    name: "Jd Paulista",
+    temp: 18,
+    color: "#378ADD",
+    legendFontColor: "#85B7EB",
+    legendFontSize: 12,
+  },
+  {
+    name: "Portal dos Nobres",
+    temp: 20,
+    color: "#185FA5",
+    legendFontColor: "#85B7EB",
+    legendFontSize: 12,
+  },
+  {
+    name: "Três Pontes",
+    temp: 15,
+    color: "#0C447C",
+    legendFontColor: "#85B7EB",
+    legendFontSize: 12,
+  },
+  {
+    name: "Jd Alto da Boa Vista",
+    temp: 15,
+    color: "#E6F1FB",
+    legendFontColor: "#85B7EB",
+    legendFontSize: 12,
+  },
+];
+
+const chartConfig = {
+  backgroundGradientFrom: "#0C447C",
+  backgroundGradientFromOpacity: 1,
+  backgroundGradientTo: "#042C53",
+  backgroundGradientToOpacity: 1,
+  color: (opacity = 1) => `rgba(55, 138, 221, ${opacity})`,
+  labelColor: (opacity = 1) => `rgba(133, 183, 235, ${opacity})`,
+  strokeWidth: 2,
+  barPercentage: 0.5,
+  useShadowColorFromDataset: false,
+  propsForDots: {
+    r: "4",
+    strokeWidth: "2",
+    stroke: "#378ADD",
+  },
+};
+
+export default function Dashboard() {
   return (
-    <ScrollView
-      style={styles.scroll}
-      contentContainerStyle={styles.container}
-    >
-      {/* Ícone */}
-      <View style={styles.iconContainer}>
-        <Text style={styles.icon}>☁️</Text>
+    <ScrollView style={styles.container} contentContainerStyle={styles.inner}>
+      <Text style={styles.title}>Estação Meteorológica Sesi</Text>
+      <Text style={styles.subtitle}>Monitoramento Ambiental</Text>
+
+      {/* Card de Últimas Medições */}
+      <View style={styles.card}>
+        <Text style={styles.sectionTitle}>Últimas Medições</Text>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>Temperatura</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.measureItem}>
+            <Text style={styles.label}>12/06/2026</Text>
+            <Text style={styles.measureValue}>25ºC</Text>
+          </View>
+          <View style={styles.measureItem}>
+            <Text style={styles.label}>11/06/2026</Text>
+            <Text style={styles.measureValue}>22ºC</Text>
+          </View>
+        </View>
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>Umidade</Text>
+          <View style={styles.dividerLine} />
+        </View>
+
+        <View style={styles.row}>
+          <View style={styles.measureItem}>
+            <Text style={styles.label}>12/06/2026</Text>
+            <Text style={styles.measureValue}>60%</Text>
+          </View>
+          <View style={styles.measureItem}>
+            <Text style={styles.label}>11/06/2026</Text>
+            <Text style={styles.measureValue}>80%</Text>
+          </View>
+        </View>
       </View>
 
-      {/* Título */}
-      <Text style={styles.titulo}>Cadastro de medição</Text>
-      <Text style={styles.subtitulo}>
-        Registre os dados climáticos
-      </Text>
-
-      {/* Card */}
+      {/* Card dos Gráficos */}
       <View style={styles.card}>
-        {/* Temperatura */}
-        <Text style={styles.label}>Temperatura</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="0.0"
-            placeholderTextColor="#1E88E5"
-            keyboardType="numeric"
-          />
-          <Text style={styles.unidade}>°C</Text>
+        <Text style={styles.sectionTitle}>Acompanhe em Tempo Real</Text>
+
+        <Text style={styles.label}>TEMPERATURA MENSAL (ºC)</Text>
+        <LineChart
+          data={dadosLinha}
+          width={width - 80}
+          height={200}
+          chartConfig={chartConfig}
+          bezier
+          style={styles.chart}
+        />
+
+        <View style={styles.divider}>
+          <View style={styles.dividerLine} />
+          <Text style={styles.dividerText}>por bairro</Text>
+          <View style={styles.dividerLine} />
         </View>
 
-        {/* Umidade */}
-        <Text style={styles.label}>Umidade</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="0"
-            placeholderTextColor="#1E88E5"
-            keyboardType="numeric"
-          />
-          <Text style={styles.unidade}>%</Text>
-        </View>
-
-        {/* Velocidade do Vento */}
-        <Text style={styles.label}>Velocidade do vento</Text>
-        <View style={styles.inputContainer}>
-          <TextInput
-            style={styles.input}
-            placeholder="0"
-            placeholderTextColor="#1E88E5"
-            keyboardType="numeric"
-          />
-          <Text style={styles.unidade}>km/h</Text>
-        </View>
-
-        <View style={styles.divisor} />
-
-        {/* Botão */}
-        <TouchableOpacity style={styles.botao}>
-          <Text style={styles.textoBotao}>
-            Salvar medição
-          </Text>
-        </TouchableOpacity>
-
-        <Text style={styles.aviso}>
-          Todos os campos são obrigatórios
-        </Text>
+        <Text style={styles.label}>BAIRROS DE MIRANDÓPOLIS</Text>
+        <PieChart
+          data={dadosPizza}
+          width={width - 80}
+          height={80}
+          chartConfig={chartConfig}
+          accessor="temp"
+          backgroundColor="transparent"
+          style={styles.chart}
+        />
       </View>
     </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
-  scroll: {
-    flex: 1,
-    backgroundColor: '#002B5B',
-  },
-
   container: {
-    alignItems: 'center',
-    paddingTop: 50,
-    paddingBottom: 40,
-    minHeight: '100%',
-  },
-
-  iconContainer: {
-    width: 80,
-    height: 80,
-    borderRadius: 40,
-    backgroundColor: '#0A4A8A',
-    justifyContent: 'center',
-    alignItems: 'center',
-    borderWidth: 1,
-    borderColor: '#1E88E5',
-    marginBottom: 20,
-  },
-
-  icon: {
-    fontSize: 30,
-  },
-
-  titulo: {
-    fontSize: 34,
-    fontWeight: 'bold',
-    color: '#FFFFFF',
-    textAlign: 'center',
-  },
-
-  subtitulo: {
-    fontSize: 16,
-    color: '#7FBFFF',
-    marginTop: 5,
-    marginBottom: 30,
-    textAlign: 'center',
-  },
-
-  card: {
-    width: '90%',
-    backgroundColor: '#0A4A8A',
-    borderRadius: 15,
-    padding: 20,
-    borderWidth: 1,
-    borderColor: '#1E88E5',
-  },
-
-  label: {
-    color: '#8BC4FF',
-    fontSize: 12,
-    textTransform: 'uppercase',
-    letterSpacing: 1,
-    marginBottom: 8,
-    marginTop: 10,
-  },
-
-  inputContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: '#002B5B',
-    borderRadius: 10,
-    borderWidth: 1,
-    borderColor: '#1E88E5',
-    paddingHorizontal: 15,
-    marginBottom: 15,
-  },
-
-  input: {
     flex: 1,
-    height: 50,
-    color: '#FFFFFF',
+    backgroundColor: "#042C53",
+  },
+  inner: {
+    alignItems: "center",
+    paddingHorizontal: 24,
+    paddingVertical: 32,
+  },
+  title: {
+    color: "#E6F1FB",
+    fontSize: 26,
+    fontWeight: "500",
+    marginBottom: 4,
+    textAlign: "center",
+  },
+  subtitle: {
+    color: "#85B7EB",
+    fontSize: 14,
+    marginBottom: 28,
+  },
+  card: {
+    backgroundColor: "#0C447C",
+    borderRadius: 12,
+    borderWidth: 0.5,
+    borderColor: "#185FA5",
+    padding: 24,
+    width: "100%",
+    marginBottom: 16,
+  },
+  sectionTitle: {
+    color: "#E6F1FB",
     fontSize: 16,
+    fontWeight: "500",
+    marginBottom: 16,
   },
-
-  unidade: {
-    color: '#1E88E5',
-    fontWeight: 'bold',
-    fontSize: 15,
+  label: {
+    color: "#85B7EB",
+    fontSize: 11,
+    letterSpacing: 0.8,
+    marginBottom: 6,
   },
-
-  divisor: {
-    height: 1,
-    backgroundColor: '#1E88E5',
-    opacity: 0.3,
-    marginVertical: 20,
+  row: {
+    flexDirection: "row",
+    gap: 12,
+    marginBottom: 8,
   },
-
-  botao: {
-    backgroundColor: '#4A90E2',
-    height: 50,
-    borderRadius: 10,
-    justifyContent: 'center',
-    alignItems: 'center',
+  measureItem: {
+    flex: 1,
+    backgroundColor: "#042C53",
+    borderWidth: 0.5,
+    borderColor: "#185FA5",
+    borderRadius: 8,
+    paddingHorizontal: 14,
+    paddingVertical: 11,
   },
-
-  textoBotao: {
-    color: '#FFFFFF',
-    fontSize: 18,
-    fontWeight: 'bold',
+  measureValue: {
+    color: "#378ADD",
+    fontSize: 20,
+    fontWeight: "500",
   },
-
-  aviso: {
-    color: '#6FB5FF',
-    textAlign: 'center',
-    marginTop: 15,
+  chart: {
+    borderRadius: 8,
+    marginBottom: 8,
+  },
+  divider: {
+    flexDirection: "row",
+    alignItems: "center",
+    marginVertical: 16,
+    gap: 8,
+  },
+  dividerLine: {
+    flex: 1,
+    height: 0.5,
+    backgroundColor: "#185FA5",
+  },
+  dividerText: {
+    color: "#185FA5",
     fontSize: 12,
   },
 });
